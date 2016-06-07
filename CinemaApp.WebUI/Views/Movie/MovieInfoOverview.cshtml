@@ -1,0 +1,48 @@
+﻿@model CinemaApp.WebUI.Models.ScheduleOverviewModel
+
+@{
+    ViewBag.Title = "MovieInfoOverview";
+}
+
+<div class="container jumbotron">
+    <div style="margin:15px">
+        <div class="row" style="margin-bottom:15px">
+            <div class="col-md-12" style="text-align:center; background-color:#FFF; font:bold;">
+                <h2>BESTELLEN &amp; RESERVEREN</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li class="active">Kaartjes selecteren</li>
+                    <li>Stoel selecteren</li>
+                    <li>Bevestigen</li>
+                    <li>Afronden</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <img class="image-center" src="~/Content/Images/@Model.movie.ImageData">
+            </div>
+            <div class="col-md-9">
+                <div class="movie-data">
+                    <h3>@Model.movie.Name</h3><br />
+                    <p>@Model.schedule.Date.ToString("dd-mm-yyyy HH:mm")</p>
+                    <p>Zaal @Model.schedule.hall.Id</p> <br />
+
+                    @if (@Model.schedule.hall.WheelchairAccesibility == true)
+            {
+                        <div class="wheelchairaccesibility">
+                            <p><i class="fa fa-wheelchair"></i><em> Deze zaal is rolstoelvriendelijk</em></p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div id="ticketView">
+            @{ Html.RenderAction("TicketSelect", "TicketSelect", new { scheduleID = Model.schedule.Id }); }
+        </div>
+    </div>
+</div>

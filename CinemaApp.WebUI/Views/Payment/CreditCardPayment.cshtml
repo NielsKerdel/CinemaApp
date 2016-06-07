@@ -1,0 +1,17 @@
+﻿@model CinemaApp.WebUI.Models.PaymentViewModel
+
+@{
+    ViewBag.Title = "Afronding betaling";
+}
+
+<div class="container jumbotron">
+    <div class="row">
+        <div class="col-md-12" style="text-align:center">
+            <h2>Betaling succesvol afgerond.</h2>
+           <p>Hartelijk dank voor uw bestelling.</p>
+            <p>Met het onderstaande ordernummer kunt u uw bestelling bij de bioscoop ophalen.</p>
+            <h3>Ordernummer: @Model.generatedCode</h3>
+        </div>
+    </div>
+</div>
+

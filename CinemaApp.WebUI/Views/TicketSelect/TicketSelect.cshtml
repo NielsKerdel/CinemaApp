@@ -1,0 +1,627 @@
+﻿@model CinemaApp.WebUI.Models.SelectedMovieViewModel
+
+@{
+    Layout = null;
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table" style="width:100%; margin-top:15px; background-color:white; font-size: 1.5em;">
+                <thead>
+                    <tr>
+                        <th>Type kaartje</th>
+                        <th>Prijs</th>
+                        <th>Aantal</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <tr>
+                            <td>Normaal</td>
+                           
+                             @if (Model.movie.Duration < 120)
+                             {
+                                 if(Model.movie.Type == "3D")
+                                 {
+                                     ViewBag.Price = "11.00";
+                                 } else
+                                 {
+                                     ViewBag.Price = "8.50";
+                                 }
+
+
+                             }
+                             else
+                             {
+                                 if(Model.movie.Type == "3D")
+                                 {
+                                     ViewBag.Price = "11.50";
+                                 } else
+                                 {
+                                     ViewBag.Price = "9.00";
+                                 }
+
+                             }
+
+                            <td>€ @ViewBag.Price</td>
+                            <td>
+                                <select name="aantal" class="form-control" id="regular" onchange="get_amount_regular()">
+                                    <option value="0" selected="selected">0</option>
+                                    <option value="1" >1</option>
+                                    <option value="2" >2</option>
+                                    <option value="3" >3</option>
+                                    <option value="4" >4</option>
+                                    <option value="5" >5</option>
+                                    <option value="6" >6</option>
+                                    <option value="7" >7</option>
+                                    <option value="8" >8</option>
+                                    <option value="9" >9</option>
+                                    <option value="10" >10</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            @if (Model.movie.Language.Equals("Nederlands") && Model.schedule.Date.Hour < 18)
+                            {
+                            <td>Kinderkorting</td>
+                            <td> 
+                            @{ 
+                                var currentPrice = ViewBag.Price as string;
+                                switch (currentPrice)
+                                {
+                                    case "11.00":
+                                        ViewBag.ChildPrice = "9.50";
+                                        break;
+                                    case "9.00":
+                                        ViewBag.ChildPrice = "7.50";
+                                        break;
+                                    default:
+                                        ViewBag.ChildPrice = "7.00";
+                                        break;
+                                }
+                            }
+
+                            € @ViewBag.ChildPrice</td>
+                            <td>
+                                <select name="aantal" class="form-control" id="child"onchange="get_amount_child()">
+                                    <option value="0" selected="selected">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </td>
+                            }
+                        </tr>
+                        <tr>
+                            @{
+                                var startDay = DayOfWeek.Monday;
+                                var endDay = DayOfWeek.Thursday;
+
+                                if (DateTime.Today.DayOfWeek >= startDay && DateTime.Today.DayOfWeek <= endDay)
+                                {
+                                    <td>Studentenkorting</td>
+                                    <td>
+                                        @{
+                                            var currentPrice = ViewBag.Price as string;
+                                            switch (currentPrice)
+                                            {
+                                                case "11.00":
+                                                    ViewBag.StudentPrice = "9.50";
+                                                    break;
+                                                case "9.00":
+                                                    ViewBag.StudentPrice = "7.50";
+                                                    break;
+                                                default:
+                                                    ViewBag.StudentPrice = "7.00";
+                                                    break;
+                                            }
+                                        }
+                         
+                                    € @ViewBag.StudentPrice</td>
+                                <td>
+                                    <select name="aantal" class="form-control" id="student"onchange="get_amount_student()">
+                                        <option value="0" selected="selected">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                            </td>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            @{
+                                var startDay2 = DayOfWeek.Monday;
+                            var endDay2 = DayOfWeek.Thursday;
+
+                                if (DateTime.Today.DayOfWeek >= startDay2 && DateTime.Today.DayOfWeek <= endDay2 && Model.schedule.isHoliday != true)
+                                {
+                                    <td>65+ reductie</td>
+                                    <td>
+
+                                        @{
+                                            var currentPrice = ViewBag.Price as string;
+                                            switch (currentPrice)
+                                            {
+                                                case "11.00":
+                                                    ViewBag.OlderPrice = "9.50";
+                                                    break;
+                                                case "9.00":
+                                                    ViewBag.OlderPrice = "7.50";
+                                                    break;
+                                                default:
+                                                    ViewBag.OlderPrice = "7.00";
+                                                    break;
+                                            }
+                                        }
+
+                                        € @ViewBag.OlderPrice
+                                    </td>
+                                    <td>
+                                        <select name="aantal" class="form-control" id="older" onchange="get_amount_older()">
+                                            <option value="0" selected="selected">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                            </td>
+                            }
+                            }
+                        </tr>
+                        <tr>
+                            @{
+                                ViewBag.PopcornPrice = "11.50";
+                            }
+                            <td>Popcorn arrangement <i class="fa fa-info-circle" data-toggle="modal" data-target="#myModal"></i></td>
+                            <td>€ @ViewBag.PopcornPrice</td>
+                           
+                            <td>
+                                <select name="aantal" class="form-control" id="popcorn" onchange="get_amount_popcorn()">
+                                    <option value="0" selected="selected">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            @{
+                                ViewBag.LadiesNightPrice = "11.50";
+                            }
+                            <td>Ladies Night <i class="fa fa-info-circle" data-toggle="modal" data-target="#myModal2"></i></td>
+                            <td>€ @ViewBag.LadiesNightPrice</td>
+                            <td>
+                                <select name="aantal" class="form-control" id="ladiesnight" onchange="get_amount_ladies_night()">
+                                    <option value="0" selected="selected">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <button class="btn btn-primary" style="width:100%;" onclick="cancelTicketSelection()">Vorige</button>
+        </div>
+        <div class="col-md-4" style="text-align:center;">
+         
+            <h3 style="color: #fff">Aantal kaartjes: <span id="total_tickets">0</span></h3>
+                    <h3 style="color:#fff">Totaal: € <span id="total_price">0.00</span></h3>
+    
+                   
+                    
+            </div>
+        <div class="col-md-4">
+            <button disabled class="btn btn-primary" id="nextButton" style="width:100%" onclick="sendTotalTickets()">Volgende</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Popcorn arrangement</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="color:#D25400">1x medium popcorn en 1x medium frisdrank.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal2 -->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal2 content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Ladies Night</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="color:#D25400">twee wijn naar keuze met twee tussendoortjes naar keuze.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+<script type="text/javascript" language="javascript">
+
+    var oldValueRegular = 0;
+    var oldValueChild = 0;
+    var oldValueStudent = 0;
+    var oldValueOlder = 0;
+    var oldValuePopcorn = 0;
+    var oldValueLadiesNight = 0;
+
+
+    // regular function //
+function get_amount_regular() {
+    var x = parseInt(document.getElementById("regular").value);
+    var totalTickets = parseInt(document.getElementById("total_tickets").textContent);
+        var totalPrice = parseFloat(document.getElementById("total_price").textContent);
+        var currentPrice = parseFloat(@ViewBag.Price);
+
+        if (x != oldValueRegular) {
+            if (x > oldValueRegular) {
+
+                var ticketsToAdd = parseInt(x - oldValueRegular);
+                oldValueRegular = x;
+
+                var priceToAdd = parseFloat(ticketsToAdd * currentPrice);
+                totalTickets += ticketsToAdd;
+                totalPrice += priceToAdd;
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            } else {
+                var ticketsToRemove = parseInt(oldValueRegular - x);
+                oldValueRegular = x;
+
+                var priceToRemove = parseFloat(ticketsToRemove * currentPrice);
+                totalTickets -= ticketsToRemove;
+                totalPrice -= priceToRemove;
+
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            }
+        }
+    }
+
+    // child function //
+    function get_amount_child() {
+        var x = parseInt(document.getElementById("child").value);
+        var totalPrice = parseFloat(document.getElementById("total_price").textContent);
+        var totalTickets = parseInt(document.getElementById("total_tickets").textContent);
+        var currentPrice = parseFloat(@ViewBag.ChildPrice);
+
+        if (x != oldValueChild) {
+            if (x > oldValueChild) {
+
+                var ticketsToAdd = parseInt(x - oldValueChild);
+                oldValueChild = x;
+
+                var priceToAdd = parseFloat(ticketsToAdd * currentPrice);
+                totalTickets += ticketsToAdd;
+                totalPrice += priceToAdd;
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            } else {
+                var ticketsToRemove = parseInt(oldValueChild - x);
+                oldValueChild = x;
+
+                var priceToRemove = parseFloat(ticketsToRemove * currentPrice);
+                totalTickets -= ticketsToRemove;
+                totalPrice -= priceToRemove;
+
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            }
+        }
+    }
+    // student function //
+    function get_amount_student() {
+        var x = parseInt(document.getElementById("student").value);
+        var totalPrice = parseFloat(document.getElementById("total_price").textContent);
+        var totalTickets = parseInt(document.getElementById("total_tickets").textContent);
+        var currentPrice = parseFloat(@ViewBag.StudentPrice);
+
+        if (x != oldValueStudent) {
+            if (x > oldValueStudent) {
+
+                var ticketsToAdd = parseInt(x - oldValueStudent);
+                oldValueStudent = x;
+
+                var priceToAdd = parseFloat(ticketsToAdd * currentPrice);
+                totalTickets += ticketsToAdd;
+                totalPrice += priceToAdd;
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            } else {
+                var ticketsToRemove = parseInt(oldValueStudent - x);
+                oldValueStudent = x;
+
+                var priceToRemove = parseFloat(ticketsToRemove * currentPrice);
+                totalTickets -= ticketsToRemove;
+                totalPrice -= priceToRemove;
+
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            }
+        }
+    }
+
+    // older function //
+    function get_amount_older() {
+        var x = parseInt(document.getElementById("older").value);
+        var totalPrice = parseFloat(document.getElementById("total_price").textContent);
+        var totalTickets = parseInt(document.getElementById("total_tickets").textContent);
+        var currentPrice = parseFloat(@ViewBag.OlderPrice);
+
+        if (x != oldValueOlder) {
+            if (x > oldValueOlder) {
+
+                var ticketsToAdd = parseInt(x - oldValueOlder);
+                oldValueOlder = x;
+
+                var priceToAdd = parseFloat(ticketsToAdd * currentPrice);
+                totalTickets += ticketsToAdd;
+                totalPrice += priceToAdd;
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            } else {
+                var ticketsToRemove = parseInt(oldValueOlder - x);
+                oldValueOlder = x;
+
+                var priceToRemove = parseFloat(ticketsToRemove * currentPrice);
+                totalTickets -= ticketsToRemove;
+                totalPrice -= priceToRemove;
+
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            }
+        }
+    }
+
+    // popcorn function //
+    function get_amount_popcorn() {
+        var x = parseInt(document.getElementById("popcorn").value);
+        var totalPrice = parseFloat(document.getElementById("total_price").textContent);
+        var totalTickets = parseInt(document.getElementById("total_tickets").textContent);
+        var currentPrice = parseFloat(@ViewBag.PopcornPrice);
+
+        if (x != oldValuePopcorn) {
+            if (x > oldValuePopcorn) {
+
+                var ticketsToAdd = parseInt(x - oldValuePopcorn);
+                oldValuePopcorn = x;
+
+                var priceToAdd = parseFloat(ticketsToAdd * currentPrice);
+                totalTickets += ticketsToAdd;
+                totalPrice += priceToAdd;
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            } else {
+                var ticketsToRemove = parseInt(oldValuePopcorn - x);
+                oldValuePopcorn = x;
+
+                var priceToRemove = parseFloat(ticketsToRemove * currentPrice);
+                totalTickets -= ticketsToRemove;
+                totalPrice -= priceToRemove;
+
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            }
+        }
+    }
+
+    // ladies night function //
+    function get_amount_ladies_night() {
+        var x = parseInt(document.getElementById("ladiesnight").value);
+        var totalPrice = parseFloat(document.getElementById("total_price").textContent);
+        var totalTickets = parseInt(document.getElementById("total_tickets").textContent);
+        var currentPrice = parseFloat(@ViewBag.LadiesNightPrice);
+
+        if (x != oldValueLadiesNight) {
+            if (x > oldValueLadiesNight) {
+
+                var ticketsToAdd = parseInt(x - oldValueLadiesNight);
+                oldValueLadiesNight = x;
+
+                var priceToAdd = parseFloat(ticketsToAdd * currentPrice);
+                totalTickets += ticketsToAdd;
+                totalPrice += priceToAdd;
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            } else {
+                var ticketsToRemove = parseInt(oldValueLadiesNight - x);
+                oldValueLadiesNight = x;
+
+                var priceToRemove = parseFloat(ticketsToRemove * currentPrice);
+                totalTickets -= ticketsToRemove;
+                totalPrice -= priceToRemove;
+
+
+                document.getElementById("total_tickets").innerHTML = totalTickets;
+                document.getElementById("total_price").innerHTML = parseFloat(totalPrice).toFixed(2);
+
+                if (totalTickets == 0) {
+                    document.getElementById('nextButton').disabled = "disabled";
+                } else {
+                    document.getElementById('nextButton').disabled = "";
+                }
+            }
+        }
+    }
+
+    function sendTotalTickets() {
+        var scheduleID = parseInt(@Model.schedule.Id);
+        var totalTickets = parseInt(document.getElementById('total_tickets').textContent);
+        var countRegular = oldValueRegular;
+        var countChild = oldValueChild;
+        var countStudent = oldValueStudent;
+        var countSenior = oldValueOlder;
+        var countPopcorn = oldValuePopcorn;
+        var countLadies = oldValuePopcorn;
+        var getTotalPrice = parseFloat(document.getElementById('total_price').innerHTML);
+
+
+        var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/ChairOverview/ChairInfoOverview';
+        $('<form action="' + full + '" method="POST">' +
+        '<input type="hidden" name="scheduleID" value="' + scheduleID + '">' +
+        '<input type="hidden" name="chairs" value="' + totalTickets + '">' +
+        '<input type="hidden" name="totalRegular" value="' + countRegular + '">' +
+        '<input type="hidden" name="totalChild" value="' + countChild + '">' +
+        '<input type="hidden" name="totalStudent" value="' + countStudent + '">' +
+        '<input type="hidden" name="totalSenior" value="' + countSenior + '">' +
+        '<input type="hidden" name="totalPopcorn" value="' + countPopcorn + '">' +
+        '<input type="hidden" name="totalLadies" value="' + countLadies + '">' +
+        '<input type="hidden" name="totalPrice" value="' + getTotalPrice + '">' +
+        '</form>').submit();
+
+    }
+
+
+
+    function cancelTicketSelection() {
+        var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/Home/Index';
+        $('<form action="' + full + '" method="POST">' +
+        '</form>').submit();
+    }
+
+
+
+</script>

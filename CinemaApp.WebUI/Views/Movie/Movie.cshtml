@@ -1,0 +1,102 @@
+﻿@model CinemaApp.WebUI.Models.KijkwijzerViewModel
+
+
+@{
+    ViewBag.Title = "Movie";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="~/Content/Images/@Model.movie.ImageData" alt="Deadpool" style="margin-top:20px">
+            </div>
+            <div class="col-md-8">
+                <h2>
+                    @Model.movie.Name <span>
+
+                        @foreach (char c in Model.movie.Kijkwijzer)
+                        {
+                            if (Model.kijkwijzer.FirstOrDefault(k => k.Character == c.ToString()) != null)
+                            {
+                                var kijkwijzer = Model.kijkwijzer.FirstOrDefault(a => a.Character == c.ToString());
+                                <img src="~/Content/Images/Icons/@kijkwijzer.ImageData" width="30" height="30" />
+                            }
+                        }
+
+                    </span>
+
+                </h2>
+                <table class="table" style="background-color: #f1f1f1">
+                    <tbody>
+                        <tr>
+                            <td><strong>Gesproken taal:</strong></td>
+                            <td>@Model.movie.Language</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ondertiteling:</strong></td>
+                            <td>@Model.movie.Subtitle</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Regiseur:</strong></td>
+                            <td>@Model.movie.Writer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hoofdrolspelers:</strong></td>
+                            <td>@Model.movie.Stars</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Webiste:</strong></td>
+                            <td><a href=@Model.movie.Website>Website</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>IMDB:</strong></td>
+                            <td><a href="@Model.movie.IMDB">Website IMDB</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vul Enquette in:</strong></td>
+                            <td><a href="@Url.Action("Enquette", "Enquette")"">Enquette</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Beschrijving</h3>
+                <p>
+                    @Model.movie.Description
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Watch trailer</h3>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="@Model.movie.Trailer" width="490" height="300" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" frameborder="0" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div style="height:231px"></div>
+
+                @using (Html.BeginForm("FilteredMovieOverview", "Filter"))
+                {
+
+                    <div class="form-group row">
+                        <input type="hidden" name="date" id="date" value="">
+                    </div>
+                        <div class="form-group row">
+                            <input type="hidden" name="time" id="time" value="">
+                        </div>
+                        <div class="form-group row">
+                            <input type="hidden" id="movieSelect" name="movieSelect" value="@Model.movie.Name" />
+                        </div>
+
+                        <button type="submit" class="btn btn btn-primary" value="" style="width:100%">Vind een kaartje</button>
+
+                    
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>

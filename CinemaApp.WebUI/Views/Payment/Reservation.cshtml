@@ -1,0 +1,29 @@
+﻿@model CinemaApp.WebUI.Models.PaymentViewModel
+
+@{
+    ViewBag.Title = "Reservation";
+}
+
+<div class="container jumbotron">
+    <div class="row">
+        <div class="col-md-12" style="margin-top:15px">
+            <ul class="breadcrumb">
+                <li>Kaartjes selecteren</li>
+                <li>Stoel selecteren</li>
+                <li>Bevestigen</li>
+                <li class="active">Afronden</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="text-align: center">
+            <h2>Bedankt</h2>
+            <p>Uw reservering in succesvol geplaatst.</p>
+            <p>U kunt uw kaartjes ophalen bij de paaltjes in ons filiaal met het volgende ordernummer:</p>
+            <h3>@Model.generatedCode</h3>
+        </div>
+    </div>
+</div>
+
+
+

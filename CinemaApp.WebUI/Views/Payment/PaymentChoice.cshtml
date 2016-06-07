@@ -1,0 +1,239 @@
+﻿@model CinemaApp.WebUI.Models.PaymentViewModel
+
+@{
+    ViewBag.Title = "PaymentChoice";
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+
+    var mychairs = "";
+
+    foreach (int i in Model.chairs)
+    {
+        if (mychairs != "")
+        {
+            mychairs = mychairs + " " + i.ToString();
+        }
+        else
+        {
+            mychairs = i.ToString();
+        }
+    }
+
+    ViewBag.givenChairs = mychairs;
+
+}
+}
+
+
+<div class="container jumbotron">
+    <ul class="breadcrumb">
+        <li>Kaartjes selecteren</li>
+        <li>Stoel selecteren</li>
+        <li>Bevestigen</li>
+        <li class="active">Afronden</li>
+    </ul>
+
+
+    <h2><label>Afrekenen</label></h2>
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <div class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-controls="collapseOne">
+                        <p style="color: black; font-size: 1.5em;"><img src="~/Content/Images/Icons/Payment/ideal.png" /> IDEAL</p>
+                    </a>
+                </div>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-expanded="false" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select>
+                                    <option value="Kies uw bank">Kies uw bank..</option>
+                                    <option value="Rabobank">Rabobank</option>
+                                    <option value="ABN Amro">ABN Amro</option>
+                                    <option value="Van Lanschot Bankiers">Van Lanschot Bankiers</option>
+                                    <option value="Triodos Bank">Triodos Bank</option>
+                                    <option value="ING">ING</option>
+                                    <option value="SNS Bank">SNS Bank</option>
+                                    <option value="ASN Bank">ASN Bank</option>
+                                    <option value="RegioBank">RegioBank</option>
+                                    <option value="Knab">Knab</option>
+                                    <option value="bunq">bunq</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 pull-right">
+                                <!--<a href='Url.Action("IdealPayment", "Payment")'><input value="Betalen" type="button" class="btn btn-primary" style="margin-top:15px;" /></a>-->
+                                <input value="Betalen" type="button" class="btn btn-primary" style="margin-top:15px;" onclick="payByBank()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <p style="color: black; font-size: 1.5em;"><img src="~/Content/Images/Icons/Payment/creditcard.png" /> CREDIT CARD</p>
+                    </a>
+                </div>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <div class="container">
+
+                        <form action="javascript:creditcardPayment()">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Kaartnummer:</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <input type="text" pattern="5[1-5][0-9]{14}" title="gelieve een valide nummer invoeren." style="color:#D25400" required>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Naam:</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <input type="text" pattern="^[A-Z]'?[- a-zA-Z]+$" title="Voer uw naam in." required>
+                                </div>
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Vervaldatum:</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5" style="padding-right:15px;">
+                                    <p><input type="text" placeholder="Maand" style="color:#D25400" pattern="^(0[1-9]|1[0-2])" tile="voorbeeld: 01" required />
+                                </div>
+                                <div class="col-md-5">
+                                    <p><input type="number" placeholder="Jaar" style="color:#D25400" pattern="[0-9]{4}" min="2016" required>
+                                </div>
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>CVC/CVV/CID:</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <input type="text" style="color:#D25400" pattern="[0-9]{3}" title="Voer uw code in" required>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 pull-right">
+                                    <div class="form-group">
+                                        <input value="Betalen" type="submit" class="btn btn-primary" style="margin-top:15px;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+
+<script type="text/javascript" language="javascript">
+
+    var scheduleID = @Model.schedule.Id;
+    var givenRow = @Model.row;
+    var bagchairs = "@ViewBag.givenChairs";
+    var totalTickets = @Model.totalTickets;
+    var countRegular = @Model.regularQuantity;
+    var countChild = @Model.childQuantity;
+    var countStudent = @Model.studentQuantity;
+    var countSenior = @Model.seniorQuantity;
+    var countPopcorn = @Model.popcornQuantity;
+    var countLadies = @Model.ladiesQuantity;
+    var totalPrice = @Model.totalPrice;
+    
+        function payByBank() {
+
+            var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/Payment/IdealPayment';
+            $('<form action="' + full + '" method="POST">' +
+           '<input type="hidden" name="scheduleID" value="' + scheduleID + '">' +
+           '<input type="hidden" name="totalTickets" value="' + totalTickets + '">' +
+           '<input type="hidden" name="row" value="' + givenRow + '">' +
+           '<input type="hidden" name="chairs" value="' + bagchairs + '">' +
+           '<input type="hidden" name="totalRegular" value="' + countRegular + '">' +
+           '<input type="hidden" name="totalChild" value="' + countChild + '">' +
+           '<input type="hidden" name="totalStudent" value="' + countStudent + '">' +
+           '<input type="hidden" name="totalSenior" value="' + countSenior + '">' +
+           '<input type="hidden" name="totalPopcorn" value="' + countPopcorn + '">' +
+           '<input type="hidden" name="totalLadies" value="' + countLadies + '">' +
+           '<input type="hidden" name="totalPrice" value="' + totalPrice + '">' +
+           '</form>').submit();
+        }
+
+        function creditcardPayment() {
+
+            var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/Payment/CreditCardPayment';
+            $('<form action="' + full + '" method="POST">' +
+           '<input type="hidden" name="scheduleID" value="' + scheduleID + '">' +
+           '<input type="hidden" name="totalTickets" value="' + totalTickets + '">' +
+           '<input type="hidden" name="row" value="' + givenRow + '">' +
+           '<input type="hidden" name="chairs" value="' + bagchairs + '">' +
+           '<input type="hidden" name="totalRegular" value="' + countRegular + '">' +
+           '<input type="hidden" name="totalChild" value="' + countChild + '">' +
+           '<input type="hidden" name="totalStudent" value="' + countStudent + '">' +
+           '<input type="hidden" name="totalSenior" value="' + countSenior + '">' +
+           '<input type="hidden" name="totalPopcorn" value="' + countPopcorn + '">' +
+           '<input type="hidden" name="totalLadies" value="' + countLadies + '">' +
+           '<input type="hidden" name="totalPrice" value="' + totalPrice + '">' +
+           '</form>').submit();
+        }
+
+</script>
+
+        <!--location.href='Url.Action("IdealPayment", "Payment")-->
+
+
+
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+@*<script type="text/javascript">
+
+         document.getElementById('iDealSlide').addEventListener('click', function () {
+            (this.style.height == '90px' || this.style.height == '')
+                ? this.style.height = '300px'
+                : this.style.height = '90px';
+        }, false);
+
+        document.getElementById('iDealSlide').click(function () {
+            $('#idealContent').collapse('toggle');
+        })
+
+
+
+        document.getElementById('creditCardSlide').addEventListener('click', function () {
+
+            (this.style.height == '90px' || this.style.height == '')
+                ? this.style.height = '300px'
+                : this.style.height = '90px';
+
+        }, false);
+    </script>*@

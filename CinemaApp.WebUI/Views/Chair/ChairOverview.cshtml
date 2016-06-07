@@ -1,0 +1,204 @@
+﻿@using CinemaApp.WebUI.Models
+@model ChairViewModel
+
+@{
+    Layout = null;
+}
+
+<link href="~/Content/chair.css" rel="stylesheet" />
+
+
+<script>
+var selectedChairs = [];
+        var chairs = @ViewBag.Chairs;
+        var allChairs = [];
+        var check;
+
+        function changeClass(currentChair) {
+
+            // Call function with the logic, result is most left chair
+            var result = highliteChairs(currentChair);
+            var chairsTotal = "";
+
+            if(result != null) {
+                var calculateAllChairs = (result % 1) * 10;                                     // Chair number
+                var roundNumber2 = Math.round(calculateAllChairs * 10) / 10;                    // Rounding number
+                var calculateRow = Math.floor(result);                                          // Row number
+
+                for(var arrayL = 0; arrayL < selectedChairs.length; arrayL = arrayL + 1) {
+                    document.getElementById(selectedChairs[arrayL]).className = "seat-free";    // Clear chairs
+                }
+                selectedChairs.length = 0;                                                      // Clearing array
+
+                for(var j = 0; j < (chairs / 10); j = j + 0.1) {
+                    var roundNumber3 = Math.round((calculateRow + ((roundNumber2 + j) / 10)) * 100) / 100;  // Return this number for the chairs if a button is clicked
+                    selectedChairs.push(roundNumber3);
+                    document.getElementById(roundNumber3).className = "seat-hover";
+                    chairsTotal = chairsTotal + " " + (Math.round((roundNumber2 + j - 1) * 100) / 10);  // Displaying row + chairs whom are selected
+                }
+
+                var result2 = document.getElementById("buttonConfirm").className = "button-show";
+
+                document.getElementById('row-selection').innerHTML = calculateRow;
+                document.getElementById('chair-selection').innerHTML = chairsTotal;
+            }
+
+
+        }
+
+        function highliteChairs(currentChair)  {
+            check = 0;
+
+            var chairValue = parseFloat(currentChair.value);                        // Current chair to float
+            var chairInt = Math.floor(chairValue);                                  // Row number
+            var chairDecimal = (chairValue % 1) * 10;                               // Chair number
+            var roundNumber = Math.round(chairDecimal * 10) / 10;                   // Rounding up number
+
+            var chairMath = (chairs - 1) / 10;                                      // Used only for calculations
+            var forloopMath = (chairs * 2 - 1) / 10;
+            var chairCalculate = roundNumber + chairMath;                           // Maximum chair for user
+            var roundCalculate = Math.round(chairCalculate * 10) / 10;              // Rounding again
+
+            var rightMaximum1 = roundCalculate + 0.1;                               // Check if 1 seats are inbetween
+            var rightMaximum2 = roundCalculate + 0.2;                               // Checking if 2 seats are inbetween
+
+            // Start loop to check for best chairs
+            for(var i = 0; i < forloopMath; i = i + 0.1) {
+
+                if((allChairs.indexOf(chairInt + ((rightMaximum1 - i) / 10)) > -1 == false) || ((allChairs.indexOf(chairInt + ((rightMaximum1 - i) / 10)) > -1 == true) && (allChairs.indexOf(chairInt + ((rightMaximum2 - i) / 10)) > -1 == true))) {
+                    // See if there are enough chairs
+                    for(var j = 0; j < forloopMath - i; j = j + 0.1) {
+
+                        if(allChairs.indexOf(chairInt + ((roundCalculate - i - j) / 10)) > -1 == true) {
+                            check = check + 1;
+                            if(check == chairs ) {
+
+                                if((allChairs.indexOf((chairInt + ((roundCalculate - i - j) - 0.1) / 10)) > -1 == true && allChairs.indexOf((chairInt + ((roundCalculate - i- j) - 0.2) / 10)) > -1 == true) || allChairs.indexOf((chairInt + ((roundCalculate - i - j) - 0.1) / 10)) > -1 == false) {
+                                    
+
+                                    var result = chairInt + ((roundCalculate - i - j) / 10);
+                                    return result;
+
+                                } else {
+                                    check = check - 1;
+                                }
+                            }
+                        } else {
+                            check = 0;
+                        }
+                    }
+                    check = 0;
+                } else {
+                    check = 0;
+                }
+            }
+        }
+    </script>
+
+    <div class="container jumbotron" style="background-color: white; margin-top:15px">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 style="margin-top:-15px">Maak een keuze</h2>
+            </div>
+                <div class="chair_information">
+                    <div class="col-md-2">
+                        <div style="font-size:1.5em">Rij:<span id="row-selection"></span></div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="font-size:1.5em">Stoel(en):<span id="chair-selection"></span></div>
+                    </div>
+                        </div>  
+                </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="Theater">
+                    <div class="seat-holder">
+
+                        <div class="screen-holder">
+                            <div class="screen"></div>
+                            <h4>Filmdoek</h4>
+
+                        </div>
+
+                        @foreach (var p in Model.chairs)         // For each row
+                        {
+                            ViewBag.Width = ViewBag.Width + 1;
+                            if (p.SeatID.ID == 11)                      // new line for every row
+                            {
+                                <div class="break"></div>
+                                ViewBag.Width = 0;
+                            }
+
+                            if (p.Reservation == 1)                 // seat taken
+                            {
+                                <div class="seat-taken"></div>
+                            }
+                            else if (p.Reservation == 2)            // seat free
+                            {
+                                <script>
+                                allChairs.push(@p.SeatID.RowID.ID.@p.SeatID.ID);
+                                </script>
+                                <input type="button" id="@p.SeatID.RowID.ID.@p.SeatID.ID" value="@p.SeatID.RowID.ID.@p.SeatID.ID" class="seat-free" onclick="changeClass(this)" />           
+                            }
+                            else {                                  // wheelchair seat
+                                <script>
+                                    allChairs.push(@p.SeatID.RowID.ID.@p.SeatID.ID);
+                                </script>
+                                <input type="button" id="@p.SeatID.RowID.ID.@p.SeatID.ID" value="@p.SeatID.RowID.ID.@p.SeatID.ID" class="wheelchair-free" onclick="changeClass(this)" />
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="legenda">
+                    <div class="Selectie"></div>
+                    <p class="Selectie-text">Uw Selectie</p>
+                    <div class="Vrij"></div>
+                    <p class="Vrij-text">Vrij</p>
+                    <div class="Bezet"></div>
+                    <p class="Bezet-text">Bezet</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <input style="margin-top:15px "type="button" value="Bevestig" id="buttonConfirm" class="button-hidden" onclick="getOverview()" />
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript" language="javascript">
+
+    function getOverview(){
+            var scheduleID = parseInt(@Model.schedule.Id);
+            var givenRow = document.getElementById('row-selection').textContent;
+            var selectedChairs = document.getElementById('chair-selection').textContent;
+            var totalTickets = @Model.chairQuantity;
+            var countRegular = @Model.regularQuantity;
+            var countChild = @Model.childQuantity;
+            var countStudent = @Model.studentQuantity;
+            var countSenior = @Model.seniorQuantity;
+            var countPopcorn = @Model.popcornQuantity;
+            var countLadies = @Model.ladiesQuantity;
+            var totalPrice = @Model.totalPrice;
+
+            var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/Payment/selectionOverview';
+            $('<form action="' + full + '" method="POST">' +
+            '<input type="hidden" name="scheduleID" value="' + scheduleID + '">' +
+            '<input type="hidden" name="totalTickets" value="' + totalTickets + '">' +
+            '<input type="hidden" name="row" value="' + givenRow + '">' +
+            '<input type="hidden" name="chairs" value="' + selectedChairs + '">' +
+            '<input type="hidden" name="totalRegular" value="' + countRegular + '">' +
+            '<input type="hidden" name="totalChild" value="' + countChild + '">' +
+            '<input type="hidden" name="totalStudent" value="' + countStudent + '">' +
+            '<input type="hidden" name="totalSenior" value="' + countSenior + '">' +
+            '<input type="hidden" name="totalPopcorn" value="' + countPopcorn + '">' +
+            '<input type="hidden" name="totalLadies" value="' + countLadies + '">' +
+            '<input type="hidden" name="totalPrice" value="' + totalPrice + '">' +
+            '</form>').submit();
+
+		
+    }
+</script>

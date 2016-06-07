@@ -1,0 +1,68 @@
+﻿@model CinemaApp.WebUI.Models.PaymentViewModel
+
+@{
+    ViewBag.Title = "Ideal betaling";
+
+    var mychairs = "";
+
+    foreach (int i in Model.chairs)
+    {
+        if (mychairs != "")
+        {
+            mychairs = mychairs += " " + i.ToString();
+        }
+        else
+        {
+            mychairs = i.ToString();
+        }
+    }
+
+    ViewBag.givenChairs = mychairs;
+}
+
+
+<div class="container jumbotron">
+    <div class="row">
+        <div class="col-md-12" style="text-align:center">
+            <h2>Ideal betaling Rabobank</h2>
+           <img src="~/Content/Images/ideal_overzicht.png" />
+            <br />
+            <div class="btn btn-primary" onclick="finishPayment()">Betalen</div>
+        </div>
+        
+    </div>
+</div>
+
+
+<script>
+    var scheduleID = parseInt(@Model.schedule.Id);
+    var givenRow = @Model.row;
+    var bagchairs = "@ViewBag.givenChairs";
+    var totalTickets = @Model.totalTickets;
+    var countRegular = @Model.regularQuantity;
+    var countChild = @Model.childQuantity;
+    var countStudent = @Model.studentQuantity;
+    var countSenior = @Model.seniorQuantity;
+    var countPopcorn = @Model.popcornQuantity;
+    var countLadies = @Model.ladiesQuantity;
+    var totalPrice = @Model.totalPrice;
+
+
+    function finishPayment() {
+
+        var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/Payment/CreditCardPayment';
+        $('<form action="' + full + '" method="POST">' +
+        '<input type="hidden" name="scheduleID" value="' + scheduleID + '">' +
+        '<input type="hidden" name="totalTickets" value="' + totalTickets + '">' +
+        '<input type="hidden" name="row" value="' + givenRow + '">' +
+        '<input type="hidden" name="chairs" value="' + bagchairs + '">' +
+        '<input type="hidden" name="totalRegular" value="' + countRegular + '">' +
+        '<input type="hidden" name="totalChild" value="' + countChild + '">' +
+        '<input type="hidden" name="totalStudent" value="' + countStudent + '">' +
+        '<input type="hidden" name="totalSenior" value="' + countSenior + '">' +
+        '<input type="hidden" name="totalPopcorn" value="' + countPopcorn + '">' +
+        '<input type="hidden" name="totalLadies" value="' + countLadies + '">' +
+        '<input type="hidden" name="totalPrice" value="' + totalPrice + '">' +
+        '</form>').submit();
+    }
+</script>

@@ -1,0 +1,129 @@
+﻿body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    background-image: url(Images/Background2.jpg);
+    background-attachment: fixed;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input {
+    width: 100%;
+    font-size: 1.5em;
+}
+
+
+select {
+    width: 100%;
+    font-size: 1.5em;
+}
+
+#iDealSlide {
+    border: 1px solid black;
+    height: 90px;
+    color: black;
+    background-color:white;
+    transition:             height 500ms ease;
+        -moz-transition:    height 500ms ease;
+        /*-ms-transition:     height 500ms ease;*/
+        -o-transition:      height 500ms ease;
+        -webkit-transition: height 500ms ease;
+}
+
+#creditCardSlide {
+    border: 1px solid black;
+    height: 90px;
+    color: black;
+    background-color:white;
+    transition:             height 500ms ease;
+        -moz-transition:    height 500ms ease;
+        /*-ms-transition:     height 500ms ease;*/
+        -o-transition:      height 500ms ease;
+        -webkit-transition: height 500ms ease;
+}
+
+
+textarea {
+    max-width: 280px;
+}
+
+label {
+    font-size: 1.5em;
+}
+
+
+p {
+    color: #fff;
+}
+
+.footer-basic-centered {
+    background-color: #D25400;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+    font: normal 18px sans-serif;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+    .footer-basic-centered .footer-company-motto {
+        color: #fff;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .footer-basic-centered .footer-company-name {
+        color: #fff;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .footer-basic-centered .footer-links {
+        list-style: none;
+        font-weight: bold;
+        color: #ffffff;
+        padding: 20px 0 23px;
+        margin: 0;
+        font-size: 3em;
+    }
+
+        .footer-basic-centered .footer-links a {
+            display: inline-block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+/* If you don't want the footer to be responsive, remove these media queries */
+
+@media (max-width: 600px) {
+
+    .footer-basic-centered {
+        padding: 35px;
+    }
+
+        .footer-basic-centered .footer-company-motto {
+            font-size: 18px;
+        }
+
+        .footer-basic-centered .footer-company-name {
+            font-size: 12px;
+        }
+
+        .footer-basic-centered .footer-links {
+            font-size: 14px;
+            padding: 25px 0 20px;
+        }
+
+            .footer-basic-centered .footer-links a {
+                line-height: 1.8;
+            }
+
+    
+
+}
